@@ -5,6 +5,13 @@ router.get("/login", (req, res) => {
   return res.render("login", { user: req.user });
 });
 
+router.get("/logout", (req, res) => {
+  req.logOut((err) => {
+    if (err) return res.send(err);
+    return res.redirect("/");
+  });
+});
+
 router.get(
   "/google",
   passport.authenticate("google", {
