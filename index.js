@@ -5,6 +5,9 @@ const app = express();
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth-routes");
 require("./config/passport");
+const session = require("express-session");
+const passport = require("passport");
+const flash = require("connect-flash");
 
 let port = 8080;
 
@@ -20,6 +23,17 @@ mongoose
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extende: true }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 // 設定routes
 app.use("/auth", authRoutes);
